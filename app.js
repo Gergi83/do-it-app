@@ -1,3 +1,5 @@
+const cc = console.log;
+
 // define UI vars
 const form = document.querySelector("#item-form");
 const doItList = document.querySelector(".collection");
@@ -11,6 +13,12 @@ loadEventListeners();
 function loadEventListeners() {
   // add do-it event
   form.addEventListener("submit", addDoIt);
+  // remove do-it event
+  doItList.addEventListener("click", removeDoIt);
+  // clear do-it event
+  clearBtn.addEventListener("click", clearDoItList);
+  // filter do-it events
+  filter.addEventListener("keyup", filterDoItList);
 }
 
 // add do it
@@ -39,4 +47,33 @@ function addDoIt(e) {
   doItInput.value = "";
 
   e.preventDefault();
+}
+
+// remove do-it
+function removeDoIt(e) {
+  if (e.target.parentElement.classList.contains("delete-item")) {
+    if (confirm("Are You Sure?")) {
+      e.target.parentElement.parentElement.remove();
+    }
+  }
+}
+
+function clearDoItList() {
+  while (doItList.firstChild) {
+    doItList.removeChild(doItList.firstChild);
+  }
+}
+
+// filter do-it list
+function filterDoItList(e) {
+  const text = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".collection-item").forEach(function (doIt) {
+    const item = doIt.firstChild.textContent;
+    if (item.toLowerCase().indexOf(text) != -1) {
+      doIt.style.display = "block";
+    } else {
+      doIt.style.display = "none";
+    }
+  });
 }
